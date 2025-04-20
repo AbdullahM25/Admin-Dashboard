@@ -1,0 +1,57 @@
+.cards {
+    background: #0f172a;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .card {
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .card h4 {
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+  .card p {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .tables {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+  }
+  .table-wrapper {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow-x: auto;
+  }
+  .table-wrapper h3 {
+    margin: 0;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  td.active    { color: #16a34a; font-weight: bold; }   /* green */
+  td.inactive  { color: #ca8a04; font-weight: bold; }   /* yellow */
+  td.banned    { color: #dc2626; font-weight: bold; }   /* red */
+  
+  td.in-stock  { color: #16a34a; font-weight: bold; }
+  td.low-stock { color: #ca8a04; font-weight: bold; }
+  td.out-stock { color: #dc2626; font-weight: bold; }
+  

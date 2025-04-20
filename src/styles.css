@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    background: #2e2e2e;  /* ensure the page background is dark grey */
+  }
+  
