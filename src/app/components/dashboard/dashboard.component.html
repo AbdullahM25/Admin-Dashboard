@@ -1,41 +1,57 @@
 <p>dashboard works!</p>
+
+<!-- Cards Summary -->
 <section class="cards">
-  <div class="card">
-    <h4>Total Orders:</h4>
-    <p>{{ orders | number }}</p>
-  </div>
-  <div class="card">
-    <h4>Revenue:</h4>
-    <p>${{ revenue | number }}</p>
-  </div>
-  <div class="card">
-    <h4>
-      <button class="products-header-btn" (click)="showProductToast()">
-        Products:
-      </button>
-    </h4>
-
-    <p>{{ totalProducts() }}</p>
-  </div>
-  <div class="card">
-    <h4>Customers:</h4>
-    <p>{{ totalUsers() }}</p>
-  </div>
+  <!-- ... existing cards ... -->
 </section>
-<div class="p-4"></div>
 
+<!-- User Form (Add/Edit) -->
+<div class="form-section">
+  <h3 class="dashboard-header">
+    {{ editingUserId ? '✏️ Edit User' : '➕ Add User' }}
+  </h3>
+  <form (ngSubmit)="createUser()">
+    <input [(ngModel)]="newUser.name" name="userName" placeholder="Name" required />
+    <input [(ngModel)]="newUser.email" name="userEmail" type="email" placeholder="Email" required />
+    <select [(ngModel)]="newUser.status" name="userStatus">
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+      <option value="banned">Banned</option>
+    </select>
+    <button type="submit">
+      {{ editingUserId ? 'Save User' : 'Add User' }}
+    </button>
+    <button type="button" *ngIf="editingUserId" (click)="cancelEditUser()">
+      Cancel
+    </button>
+  </form>
+</div>
+
+<!-- Product Form (Add/Edit) -->
+<div class="form-section">
+  <h3 class="dashboard-header">
+    {{ editingProductId ? '✏️ Edit Product' : '➕ Add Product' }}
+  </h3>
+  <form (ngSubmit)="createProduct()">
+    <input [(ngModel)]="newProduct.name" name="prodName" placeholder="Product Name" required />
+    <input [(ngModel)]="newProduct.stock" name="prodStock" type="number" min="0" placeholder="Stock" required />
+    <button type="submit">
+      {{ editingProductId ? 'Save Product' : 'Add Product' }}
+    </button>
+    <button type="button" *ngIf="editingProductId" (click)="cancelEditProduct()">
+      Cancel
+    </button>
+  </form>
+</div>
+
+<!-- Data Tables -->
 <section class="tables">
   <div class="table-wrapper">
-    <h3>Users</h3>
-    <h3 class="p-4 text-lg font-semibold">👥Users</h3>
-
+    <h3 class="dashboard-header">👥 Users</h3>
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Status</th>
+          <th>#</th><th>Name</th><th>Email</th><th>Status</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -44,36 +60,28 @@
           <td>{{ u.name }}</td>
           <td>{{ u.email }}</td>
           <td [ngClass]="u.status">{{ u.status }}</td>
+          <td><button (click)="startEditUser(u)">Edit</button></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="table-wrapper">
-    <h3>Products:</h3>
+    <h3 class="dashboard-header">
+      <button class="products-header-btn" (click)="showProductToast()">Products</button>
+    </h3>
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Stock</th>
+          <th>#</th><th>Name</th><th>Stock</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let p of prodSvc.products()">
           <td>{{ p.id }}</td>
           <td>{{ p.name }}</td>
-          <td
-            [ngClass]="
-              p.stock > 20
-                ? 'in-stock'
-                : p.stock > 0
-                ? 'low-stock'
-                : 'out-stock'
-            "
-          >
-            {{ p.stock }}
-          </td>
+          <td [ngClass]="p.stock>20?'in-stock':p.stock>0?'low-stock':'out-stock'">{{ p.stock }}</td>
+          <td><button (click)="startEditProduct(p)">Edit</button></td>
         </tr>
       </tbody>
     </table>
