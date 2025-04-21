@@ -1,0 +1,7 @@
+<p>toast-container works!</p>
+<div class="toast-wrapper">
+  <div *ngFor="let t of toastSvc.toasts()" class="toast" [ngClass]="t.type">
+    {{ t.message }}
+    <button class="close" (click)="toastSvc.dismiss(t.id)">✕</button>
+  </div>
+</div>

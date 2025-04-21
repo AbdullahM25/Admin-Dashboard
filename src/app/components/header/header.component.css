@@ -1,23 +1,38 @@
 .app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: #1e2a38;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-  .search {
-    width: 30%;
-    padding: 0.5rem;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-  }
-  .profile {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .profile img {
-    border-radius: 50%;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #1e2a38;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+.search {
+  width: 30%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+}
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* underline only the text */
+.notification-text {
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.profile img {
+  border-radius: 50%;
+}

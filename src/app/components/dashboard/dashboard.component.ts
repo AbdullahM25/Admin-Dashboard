@@ -1,7 +1,9 @@
-import { Component, computed }       from '@angular/core';
-import { UserService }               from '../../services/user.service';
-import { ProductService }            from '../../services/product.service';
+import { Component, computed, inject } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { ProductService } from '../../services/product.service';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
+import { Toast } from '../../data/toast.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,14 +13,16 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  orders   = 1234;
-  revenue  = 56789;
+  toast = inject(ToastService);
+  userSvc = inject(UserService);
+  prodSvc = inject(ProductService);
+  orders = 1234;
+  revenue = 56789;
 
-  totalUsers    = computed(() => this.userSvc.users().length);
+  totalUsers = computed(() => this.userSvc.users().length);
   totalProducts = computed(() => this.prodSvc.products().length);
 
-  constructor(
-    public userSvc: UserService,
-    public prodSvc: ProductService
-  ) {}
+  showProductToast() {
+    this.toast.show('Here are your products!', 'neutral', 3000);
+  }
 }
