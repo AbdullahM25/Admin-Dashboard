@@ -1,68 +1,63 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { FilterPipe } from '../../pipes/filter.pipe';
-import { UserService } from '../../services/user.service';
-import { ProductService } from '../../services/product.service';
-import { ToastService } from '../../services/toast.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '../../data/users';
-import { Product } from '../../data/products';
+import { CommonModule }                        from '@angular/common';
+import { FormsModule }                         from '@angular/forms';
+import { FilterPipe }                          from '../../pipes/filter.pipe';
+import { UserService }                         from '../../services/user.service';
+import { ProductService }                      from '../../services/product.service';
+import { ToastService }                        from '../../services/toast.service';
+import { ActivatedRoute, Router, RouterModule }from '@angular/router';
+import { User }                                from '../../data/users';
+import { Product }                             from '../../data/products';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, FilterPipe],
+  imports: [CommonModule, FormsModule, FilterPipe, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  private route = inject(ActivatedRoute);
+  private route  = inject(ActivatedRoute);
   private router = inject(Router);
-
   userSvc = inject(UserService);
   prodSvc = inject(ProductService);
-  toast = inject(ToastService);
+  toast   = inject(ToastService);
 
-  orders = 1234;
+  orders  = 1234;
   revenue = 56789;
 
-  totalUsers = computed(() => this.userSvc.activeUsers().length);
+  totalUsers    = computed(() => this.userSvc.activeUsers().length);
   totalProducts = computed(() => this.prodSvc.activeProducts().length);
 
-  newUser: Omit<User, 'id' | 'archived'> = {
-    name: '',
-    email: '',
-    status: 'active',
-  };
+  newUser: Omit<User, 'id' | 'archived'>       = { name: '', email: '', status: 'active' };
   newProduct: Omit<Product, 'id' | 'archived'> = { name: '', stock: 0 };
 
   editingUserId?: number;
   editingProductId?: number;
 
-  userSearchTerm = '';
-  userStatusFilter = '';
-  productSearchTerm = '';
+  userSearchTerm     = '';
+  userStatusFilter   = '';
+  productSearchTerm  = '';
   productStockFilter = '';
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.userSearchTerm = params['userSearch'] ?? '';
-      this.userStatusFilter = params['userStatus'] ?? '';
-      this.productSearchTerm = params['prodSearch'] ?? '';
-      this.productStockFilter = params['prodStock'] ?? '';
+    this.route.queryParams.subscribe(params => {
+      this.userSearchTerm     = params['userSearch']   ?? '';
+      this.userStatusFilter   = params['userStatus']   ?? '';
+      this.productSearchTerm  = params['prodSearch']   ?? '';
+      this.productStockFilter = params['prodStock']    ?? '';
     });
   }
 
   updateQueryParams() {
     this.router.navigate([], {
       queryParams: {
-        userSearch: this.userSearchTerm || null,
-        userStatus: this.userStatusFilter || null,
-        prodSearch: this.productSearchTerm || null,
-        prodStock: this.productStockFilter || null,
+        userSearch:   this.userSearchTerm     || null,
+        userStatus:   this.userStatusFilter   || null,
+        prodSearch:   this.productSearchTerm  || null,
+        prodStock:    this.productStockFilter || null
       },
-      queryParamsHandling: 'merge',
+      queryParamsHandling: 'merge'
     });
   }
 

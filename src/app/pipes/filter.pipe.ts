@@ -1,5 +1,3 @@
-// src/app/pipes/filter.pipe.ts
-
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -7,11 +5,21 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class FilterPipe implements PipeTransform {
-  transform<T>(items: T[], term: string, field: keyof T): T[] {
+  transform<T>(
+    items: T[],
+    term: string,
+    field: keyof T
+  ): T[] {
     if (!term) return items;
-    const lower = term.toLowerCase();
-    return items.filter((item) =>
-      String(item[field]).toLowerCase().includes(lower)
-    );
+    const lowerTerm = term.toLowerCase();
+    return items.filter(item => {
+      const value = String(item[field]).toLowerCase();
+      // For status field, require exact match
+      if (field === 'status') {
+        return value === lowerTerm;
+      }
+      // Otherwise, substring match
+      return value.includes(lowerTerm);
+    });
   }
 }

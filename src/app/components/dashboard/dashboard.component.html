@@ -91,11 +91,13 @@
     <div class="filter-row">
       <input
         type="text"
+        name="userSearchTerm"
         placeholder="Search users…"
         [(ngModel)]="userSearchTerm"
         (ngModelChange)="updateQueryParams()"
       />
       <select
+        name="userStatusFilter"
         [(ngModel)]="userStatusFilter"
         (ngModelChange)="updateQueryParams()"
       >
@@ -121,8 +123,8 @@
         <tr
           *ngFor="
             let u of userSvc.activeUsers()
-              | filter : userSearchTerm : 'name'
-              | filter : userStatusFilter : 'status'
+              | filter:userSearchTerm:'name'
+              | filter:userStatusFilter:'status'
           "
         >
           <td>{{ u.id }}</td>
@@ -143,11 +145,13 @@
     <div class="filter-row">
       <input
         type="text"
+        name="productSearchTerm"
         placeholder="Search products…"
         [(ngModel)]="productSearchTerm"
         (ngModelChange)="updateQueryParams()"
       />
       <select
+        name="productStockFilter"
         [(ngModel)]="productStockFilter"
         (ngModelChange)="updateQueryParams()"
       >
@@ -176,19 +180,17 @@
         <tr
           *ngFor="
             let p of prodSvc.activeProducts()
-              | filter : productSearchTerm : 'name'
-              | filter : productStockFilter : 'stock'
+              | filter:productSearchTerm:'name'
+              | filter:productStockFilter:'stock'
           "
         >
           <td>{{ p.id }}</td>
           <td>{{ p.name }}</td>
           <td
             [ngClass]="
-              p.stock > 20
-                ? 'in-stock'
-                : p.stock > 0
-                ? 'low-stock'
-                : 'out-stock'
+              p.stock > 20 ? 'in-stock' :
+              p.stock > 0  ? 'low-stock' :
+                             'out-stock'
             "
           >
             {{ p.stock }}
