@@ -1,8 +1,7 @@
 <p>dashboard works!</p>
 
-<!-- Cards Summary -->
 <section class="cards">
-  <!-- ... existing cards ... -->
+  <!-- … your existing 4 cards here … -->
 </section>
 
 <!-- User Form (Add/Edit) -->
@@ -25,6 +24,7 @@
       required
     />
     <select [(ngModel)]="newUser.status" name="userStatus">
+      <option value="">All statuses</option>
       <option value="active">Active</option>
       <option value="inactive">Inactive</option>
       <option value="banned">Banned</option>
@@ -71,10 +71,23 @@
   </form>
 </div>
 
-<!-- Data Tables -->
 <section class="tables">
   <!-- Users Table -->
   <div class="table-wrapper">
+    <div class="filter-row">
+      <input
+        type="text"
+        placeholder="Search users…"
+        [(ngModel)]="userSearchTerm"
+      />
+      <select [(ngModel)]="userStatusFilter">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="banned">Banned</option>
+      </select>
+    </div>
+
     <h3 class="dashboard-header">👥 Users</h3>
     <table>
       <thead>
@@ -87,7 +100,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let u of userSvc.activeUsers()">
+        <tr
+          *ngFor="
+            let u of userSvc.activeUsers()
+              | filter : userSearchTerm : 'name'
+              | filter : userStatusFilter : 'status'
+          "
+        >
           <td>{{ u.id }}</td>
           <td>{{ u.name }}</td>
           <td>{{ u.email }}</td>
@@ -103,6 +122,20 @@
 
   <!-- Products Table -->
   <div class="table-wrapper">
+    <div class="filter-row">
+      <input
+        type="text"
+        placeholder="Search products…"
+        [(ngModel)]="productSearchTerm"
+      />
+      <select [(ngModel)]="productStockFilter">
+        <option value="">All stock levels</option>
+        <option value="in-stock">In Stock</option>
+        <option value="low-stock">Low Stock</option>
+        <option value="out-stock">Out of Stock</option>
+      </select>
+    </div>
+
     <h3 class="dashboard-header">
       <button class="products-header-btn" (click)="showProductToast()">
         Products
@@ -118,7 +151,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of prodSvc.activeProducts()">
+        <tr
+          *ngFor="
+            let p of prodSvc.activeProducts()
+              | filter : productSearchTerm : 'name'
+              | filter : productStockFilter : 'stock'
+          "
+        >
           <td>{{ p.id }}</td>
           <td>{{ p.name }}</td>
           <td

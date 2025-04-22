@@ -1,7 +1,6 @@
-/* 1) Import the Orbitron font from Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
-/* 2) Cards container */
+/* Cards container */
 .cards {
   background: #0f172a;
   display: grid;
@@ -10,14 +9,13 @@
   padding: 1rem;
 }
 
-/* 3) Individual cards */
+/* Individual cards */
 .card {
   background: #ffffff;
   padding: 1rem;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-/* Card titles */
 .card h4 {
   margin: 0;
   font-family: "Orbitron", sans-serif;
@@ -25,7 +23,6 @@
   font-weight: 700;
   color: #0f172a;
 }
-/* Card values */
 .card p {
   margin-top: 0.5rem;
   font-family: "Orbitron", sans-serif;
@@ -34,7 +31,7 @@
   color: #1e293b;
 }
 
-/* 4) Tables section */
+/* Tables section */
 .tables {
   display: flex;
   gap: 2rem;
@@ -49,7 +46,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
 }
-/* Section headers in tables */
 .table-wrapper h3 {
   margin: 0;
   padding: 1rem;
@@ -58,6 +54,21 @@
   font-weight: 700;
   color: #0f172a;
   border-bottom: 1px solid #e5e7eb;
+}
+
+/* Filter row */
+.filter-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1rem;
+}
+.filter-row input,
+.filter-row select {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-family: "Orbitron", sans-serif;
 }
 
 /* Table styling */
@@ -76,15 +87,15 @@ td {
 td.active {
   color: #16a34a;
   font-weight: bold;
-} /* green */
+}
 td.inactive {
   color: #ca8a04;
   font-weight: bold;
-} /* yellow */
+}
 td.banned {
   color: #dc2626;
   font-weight: bold;
-} /* red */
+}
 td.in-stock {
   color: #16a34a;
   font-weight: bold;
@@ -98,7 +109,7 @@ td.out-stock {
   font-weight: bold;
 }
 
-/* 5) Products header text styled as clickable */
+/* Products header button */
 .products-header-btn {
   background: none;
   border: none;
@@ -113,36 +124,34 @@ td.out-stock {
   text-decoration: underline;
 }
 
+/* Form section */
 .form-section {
   background: #ffffff;
   padding: 1rem;
   margin: 1rem;
   border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
 .form-section form {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
 }
-
 .form-section input,
 .form-section select {
   padding: 0.5rem;
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
 }
-
 .form-section button {
   background: #2563eb;
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   cursor: pointer;
 }
 .form-section button:hover {
