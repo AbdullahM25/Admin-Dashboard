@@ -23,27 +23,24 @@
   <h3 class="dashboard-header">
     {{ editingUserId ? "✏️ Edit User" : "➕ Add User" }}
   </h3>
-  <form (ngSubmit)="createUser()">
+  <form [formGroup]="userForm" (ngSubmit)="createUser()">
     <input
-      [(ngModel)]="newUser.name"
-      name="userName"
+      formControlName="name"
       placeholder="Name"
       required
     />
     <input
-      [(ngModel)]="newUser.email"
-      name="userEmail"
+      formControlName="email"
       type="email"
       placeholder="Email"
       required
     />
-    <select [(ngModel)]="newUser.status" name="userStatus">
-      <option value="">All statuses</option>
+    <select formControlName="status">
       <option value="active">Active</option>
       <option value="inactive">Inactive</option>
       <option value="banned">Banned</option>
     </select>
-    <button type="submit">
+    <button type="submit" [disabled]="userForm.invalid">
       {{ editingUserId ? "Save User" : "Add User" }}
     </button>
     <button type="button" *ngIf="editingUserId" (click)="cancelEditUser()">
@@ -57,22 +54,20 @@
   <h3 class="dashboard-header">
     {{ editingProductId ? "✏️ Edit Product" : "➕ Add Product" }}
   </h3>
-  <form (ngSubmit)="createProduct()">
+  <form [formGroup]="productForm" (ngSubmit)="createProduct()">
     <input
-      [(ngModel)]="newProduct.name"
-      name="prodName"
+      formControlName="name"
       placeholder="Product Name"
       required
     />
     <input
-      [(ngModel)]="newProduct.stock"
-      name="prodStock"
+      formControlName="stock"
       type="number"
       min="0"
       placeholder="Stock"
       required
     />
-    <button type="submit">
+    <button type="submit" [disabled]="productForm.invalid">
       {{ editingProductId ? "Save Product" : "Add Product" }}
     </button>
     <button
@@ -112,11 +107,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th>#</th><th>Name</th><th>Email</th><th>Status</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -170,10 +161,7 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Stock</th>
-          <th>Actions</th>
+          <th>#</th><th>Name</th><th>Stock</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>

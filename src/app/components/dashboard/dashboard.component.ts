@@ -1,10 +1,11 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule }                        from '@angular/common';
-import { FormsModule }                         from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { FilterPipe }                          from '../../pipes/filter.pipe';
 import { UserService }                         from '../../services/user.service';
 import { ProductService }                      from '../../services/product.service';
 import { ToastService }                        from '../../services/toast.service';
+import { FormService }                         from '../../services/form.service';
 import { ActivatedRoute, Router, RouterModule }from '@angular/router';
 import { User }                                from '../../data/users';
 import { Product }                             from '../../data/products';
@@ -12,25 +13,33 @@ import { Product }                             from '../../data/products';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, FilterPipe, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FilterPipe,
+    RouterModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
   private route  = inject(ActivatedRoute);
   private router = inject(Router);
-  userSvc = inject(UserService);
-  prodSvc = inject(ProductService);
-  toast   = inject(ToastService);
+  private formSvc = inject(FormService);
 
-  orders  = 1234;
-  revenue = 56789;
+  userSvc    = inject(UserService);
+  prodSvc    = inject(ProductService);
+  toast      = inject(ToastService);
+
+  orders     = 1234;
+  revenue    = 56789;
 
   totalUsers    = computed(() => this.userSvc.activeUsers().length);
   totalProducts = computed(() => this.prodSvc.activeProducts().length);
 
-  newUser: Omit<User, 'id' | 'archived'>       = { name: '', email: '', status: 'active' };
-  newProduct: Omit<Product, 'id' | 'archived'> = { name: '', stock: 0 };
+  userForm!: FormGroup;
+  productForm!: FormGroup;
 
   editingUserId?: number;
   editingProductId?: number;
@@ -41,12 +50,17 @@ export class DashboardComponent implements OnInit {
   productStockFilter = '';
 
   ngOnInit() {
+    // initialize filters from URL
     this.route.queryParams.subscribe(params => {
       this.userSearchTerm     = params['userSearch']   ?? '';
       this.userStatusFilter   = params['userStatus']   ?? '';
       this.productSearchTerm  = params['prodSearch']   ?? '';
       this.productStockFilter = params['prodStock']    ?? '';
     });
+
+    // initialize reactive forms
+    this.userForm    = this.formSvc.buildUserForm();
+    this.productForm = this.formSvc.buildProductForm();
   }
 
   updateQueryParams() {
@@ -55,9 +69,9 @@ export class DashboardComponent implements OnInit {
         userSearch:   this.userSearchTerm     || null,
         userStatus:   this.userStatusFilter   || null,
         prodSearch:   this.productSearchTerm  || null,
-        prodStock:    this.productStockFilter || null
+        prodStock:    this.productStockFilter || null,
       },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -66,26 +80,30 @@ export class DashboardComponent implements OnInit {
       this.saveUser();
       return;
     }
-    this.userSvc.addUser(this.newUser);
+    this.userSvc.addUser(this.userForm.value);
     this.toast.show('User added!', 'success', 2500);
-    this.newUser = { name: '', email: '', status: 'active' };
+    this.userForm = this.formSvc.buildUserForm();
   }
 
   startEditUser(u: User) {
     this.editingUserId = u.id;
-    this.newUser = { name: u.name, email: u.email, status: u.status };
+    this.userForm = this.formSvc.buildUserForm({
+      name: u.name,
+      email: u.email,
+      status: u.status,
+    });
   }
 
   saveUser() {
     if (!this.editingUserId) return;
-    this.userSvc.updateUser(this.editingUserId, this.newUser);
+    this.userSvc.updateUser(this.editingUserId, this.userForm.value);
     this.toast.show('User updated!', 'success', 2500);
     this.cancelEditUser();
   }
 
   cancelEditUser() {
     this.editingUserId = undefined;
-    this.newUser = { name: '', email: '', status: 'active' };
+    this.userForm      = this.formSvc.buildUserForm();
   }
 
   createProduct() {
@@ -93,29 +111,30 @@ export class DashboardComponent implements OnInit {
       this.saveProduct();
       return;
     }
-    this.prodSvc.addStock(this.newProduct.name, this.newProduct.stock);
+    const { name, stock } = this.productForm.value;
+    this.prodSvc.addStock(name, stock);
     this.toast.show('Product added/updated!', 'success', 2500);
-    this.newProduct = { name: '', stock: 0 };
+    this.productForm = this.formSvc.buildProductForm();
   }
 
   startEditProduct(p: Product) {
     this.editingProductId = p.id;
-    this.newProduct = { name: p.name, stock: p.stock };
+    this.productForm = this.formSvc.buildProductForm({
+      name: p.name,
+      stock: p.stock,
+    });
   }
 
   saveProduct() {
     if (!this.editingProductId) return;
-    this.prodSvc.updateProduct(this.editingProductId, {
-      name: this.newProduct.name,
-      stock: this.newProduct.stock,
-    });
+    this.prodSvc.updateProduct(this.editingProductId, this.productForm.value);
     this.toast.show('Product updated!', 'success', 2500);
     this.cancelEditProduct();
   }
 
   cancelEditProduct() {
     this.editingProductId = undefined;
-    this.newProduct = { name: '', stock: 0 };
+    this.productForm      = this.formSvc.buildProductForm();
   }
 
   deleteUser(id: number) {

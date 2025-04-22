@@ -1,19 +1,24 @@
 .sidebar {
   width: 240px;
-  height: 100%;
+  /* Instead of full‑height, use a calc so you can leave space below */
+  height: calc(30vh - 2rem);
+  margin-bottom: 2rem;      /* add space below the sidebar */
   background: #1e2a38;
   color: #fbf7f7ab;
   padding: 1rem;
   border-radius: 0 12px 12px 0;
 }
+
 .sidebar .logo {
   font-size: 1.25rem;
   margin-bottom: 2rem;
 }
+
 .sidebar ul {
   list-style: none;
   padding: 0;
 }
+
 .sidebar li {
   display: flex;
   align-items: center;
@@ -21,6 +26,7 @@
   margin-bottom: 1rem;
   cursor: pointer;
 }
+
 .sidebar li:hover {
   color: #ffffff;
 }
