@@ -1,7 +1,21 @@
-<p>dashboard works!</p>
-
+<!-- Summary Cards -->
 <section class="cards">
-  <!-- … your existing 4 cards here … -->
+  <div class="card">
+    <h4>Total Orders</h4>
+    <p>{{ orders | number }}</p>
+  </div>
+  <div class="card">
+    <h4>Revenue</h4>
+    <p>${{ revenue | number }}</p>
+  </div>
+  <div class="card">
+    <h4>Products</h4>
+    <p>{{ totalProducts() }}</p>
+  </div>
+  <div class="card">
+    <h4>Customers</h4>
+    <p>{{ totalUsers() }}</p>
+  </div>
 </section>
 
 <!-- User Form (Add/Edit) -->
@@ -79,8 +93,12 @@
         type="text"
         placeholder="Search users…"
         [(ngModel)]="userSearchTerm"
+        (ngModelChange)="updateQueryParams()"
       />
-      <select [(ngModel)]="userStatusFilter">
+      <select
+        [(ngModel)]="userStatusFilter"
+        (ngModelChange)="updateQueryParams()"
+      >
         <option value="">All statuses</option>
         <option value="active">Active</option>
         <option value="inactive">Inactive</option>
@@ -127,8 +145,12 @@
         type="text"
         placeholder="Search products…"
         [(ngModel)]="productSearchTerm"
+        (ngModelChange)="updateQueryParams()"
       />
-      <select [(ngModel)]="productStockFilter">
+      <select
+        [(ngModel)]="productStockFilter"
+        (ngModelChange)="updateQueryParams()"
+      >
         <option value="">All stock levels</option>
         <option value="in-stock">In Stock</option>
         <option value="low-stock">Low Stock</option>

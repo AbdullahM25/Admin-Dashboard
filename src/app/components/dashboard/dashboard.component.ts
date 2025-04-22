@@ -1,10 +1,11 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FilterPipe } from '../../pipes/filter.pipe';
 import { UserService } from '../../services/user.service';
 import { ProductService } from '../../services/product.service';
 import { ToastService } from '../../services/toast.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../data/users';
 import { Product } from '../../data/products';
 
@@ -15,7 +16,10 @@ import { Product } from '../../data/products';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   userSvc = inject(UserService);
   prodSvc = inject(ProductService);
   toast = inject(ToastService);
@@ -40,6 +44,27 @@ export class DashboardComponent {
   userStatusFilter = '';
   productSearchTerm = '';
   productStockFilter = '';
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      this.userSearchTerm = params['userSearch'] ?? '';
+      this.userStatusFilter = params['userStatus'] ?? '';
+      this.productSearchTerm = params['prodSearch'] ?? '';
+      this.productStockFilter = params['prodStock'] ?? '';
+    });
+  }
+
+  updateQueryParams() {
+    this.router.navigate([], {
+      queryParams: {
+        userSearch: this.userSearchTerm || null,
+        userStatus: this.userStatusFilter || null,
+        prodSearch: this.productSearchTerm || null,
+        prodStock: this.productStockFilter || null,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   createUser() {
     if (this.editingUserId) {
