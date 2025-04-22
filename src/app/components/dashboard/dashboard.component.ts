@@ -1,11 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
-import { CommonModule }                from '@angular/common';
-import { FormsModule }                 from '@angular/forms';
-import { UserService }                 from '../../services/user.service';
-import { ProductService }              from '../../services/product.service';
-import { ToastService }                from '../../services/toast.service';
-import { User }                        from '../../data/users';
-import { Product }                     from '../../data/products';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { ProductService } from '../../services/product.service';
+import { ToastService } from '../../services/toast.service';
+import { User } from '../../data/users';
+import { Product } from '../../data/products';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,19 +15,28 @@ import { Product }                     from '../../data/products';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
+  // services
   userSvc = inject(UserService);
   prodSvc = inject(ProductService);
-  toast   = inject(ToastService);
+  toast = inject(ToastService);
 
-  orders  = 1234;
+  // stats
+  orders = 1234;
   revenue = 56789;
 
-  totalUsers    = computed(() => this.userSvc.users().length);
-  totalProducts = computed(() => this.prodSvc.products().length);
+  // only non‑archived counts
+  totalUsers = computed(() => this.userSvc.activeUsers().length);
+  totalProducts = computed(() => this.prodSvc.activeProducts().length);
 
-  newUser: Omit<User,'id'>    = { name: '', email: '', status: 'active' };
-  newProduct: Omit<Product,'id'> = { name: '', stock: 0 };
+  // form models now omit both 'id' and 'archived'
+  newUser: Omit<User, 'id' | 'archived'> = {
+    name: '',
+    email: '',
+    status: 'active',
+  };
+  newProduct: Omit<Product, 'id' | 'archived'> = { name: '', stock: 0 };
 
+  // edit state
   editingUserId?: number;
   editingProductId?: number;
 
@@ -90,6 +99,18 @@ export class DashboardComponent {
     this.newProduct = { name: '', stock: 0 };
   }
 
+  // SOFT DELETE (archive)
+  deleteUser(id: number) {
+    this.userSvc.deleteUser(id);
+    this.toast.show('User deleted (archived)', 'warning', 2500);
+  }
+
+  deleteProduct(id: number) {
+    this.prodSvc.deleteProduct(id);
+    this.toast.show('Product deleted (archived)', 'warning', 2500);
+  }
+
+  // Toast helper
   showProductToast() {
     this.toast.show('Here are your products!', 'neutral', 3000);
   }
